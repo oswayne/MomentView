@@ -1,0 +1,2 @@
+include ':sample', ':moment-view'
+rootProject.name='MomentView'

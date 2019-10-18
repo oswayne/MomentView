@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- 发送者的头像 -->
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 该条的标题：发送的者的用户名等 -->
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:lines="1"
+        android:textColor="#6C7B8B"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@id/iv_avatar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 消息的文本内容 -->
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:textColor="#333333"
+        android:textSize="15sp"
+        app:layout_constraintLeft_toRightOf="@id/iv_avatar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <!-- 九宫格媒体信息 -->
+    <org.carder.view.AutoGridView
+        android:id="@+id/agv_media"
+        android:layout_width="200dp"
+        android:layout_height="160dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintLeft_toRightOf="@id/iv_avatar"
+        app:layout_constraintTop_toBottomOf="@id/tv_content"
+        app:maxColumn="3"
+        app:maxRaw="3" />
+
+    <!-- 该条发送时的定位 -->
+    <TextView
+        android:id="@+id/tv_locate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:lines="1"
+        android:textColor="#6C7B8B"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/agv_media" />
+
+    <!-- 该条发送时间 -->
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="start|center_vertical"
+        android:lines="1"
+        android:maxWidth="96dp"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toRightOf="@id/iv_avatar"
+        app:layout_constraintTop_toBottomOf="@id/tv_locate" />
+
+    <!-- 类型：分享来源、描述等说明信息 -->
+    <TextView
+        android:id="@+id/tv_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
+        android:gravity="start|center_vertical"
+        android:lines="1"
+        android:maxWidth="96dp"
+        android:textSize="13sp"
+        app:layout_constraintLeft_toRightOf="@id/tv_time"
+        app:layout_constraintTop_toBottomOf="@id/tv_locate" />
+
+    <!-- 操作按钮 -->
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="28dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/menu"
+        android:padding="4dp"
+        android:src="@drawable/ic_more_horiz"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_locate" />
+
+    <!-- 点赞 -->
+    <TextView
+        android:id="@+id/tv_praise"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#F2F2F2"
+        android:drawableLeft="@drawable/ic_thumb_up"
+        android:padding="2dp"
+        android:textColor="#6C7B8B"
+        app:layout_constraintLeft_toRightOf="@id/iv_avatar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_time"
+        tools:ignore="RtlHardcoded" />
+
+    <!-- 评论 -->
+    <GridLayout
+        android:id="@+id/gl_comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#F2F2F2"
+        android:columnCount="1"
+        app:layout_constraintLeft_toRightOf="@id/iv_avatar"
+        app:layout_constraintTop_toBottomOf="@id/tv_praise" />
+</androidx.constraintlayout.widget.ConstraintLayout>

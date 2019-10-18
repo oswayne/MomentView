@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">moment-view</string>
+    <string name="avatar">avatar</string>
+    <string name="menu">menu</string>
+</resources>
