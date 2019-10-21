@@ -53,6 +53,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
+        app:cellSpacing="4"
         app:layout_constraintLeft_toRightOf="@id/iv_avatar"
         app:layout_constraintTop_toBottomOf="@id/tv_content"
         app:maxColumn="3"
@@ -105,8 +106,8 @@
 
     <!-- 操作按钮 -->
     <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="28dp"
+        android:layout_width="38dp"
+        android:layout_height="24dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:contentDescription="@string/menu"
@@ -124,13 +125,38 @@
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"
         android:background="#F2F2F2"
-        android:drawableLeft="@drawable/ic_thumb_up"
-        android:padding="2dp"
+        android:paddingLeft="24dp"
+        android:paddingTop="2dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="2dp"
         android:textColor="#6C7B8B"
+        android:textSize="13sp"
         app:layout_constraintLeft_toRightOf="@id/iv_avatar"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_time"
         tools:ignore="RtlHardcoded" />
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="2dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_thumb_up"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_praise"
+        app:layout_constraintTop_toTopOf="@+id/tv_praise"
+        tools:ignore="RtlHardcoded" />
+
+    <View
+        android:id="@+id/depart_line"
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#DEDEDE"
+        app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_praise" />
 
     <!-- 评论 -->
     <GridLayout
@@ -142,5 +168,6 @@
         android:background="#F2F2F2"
         android:columnCount="1"
         app:layout_constraintLeft_toRightOf="@id/iv_avatar"
-        app:layout_constraintTop_toBottomOf="@id/tv_praise" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/depart_line" />
 </androidx.constraintlayout.widget.ConstraintLayout>

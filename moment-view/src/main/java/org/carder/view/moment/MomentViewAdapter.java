@@ -1,5 +1,6 @@
-package org.carder.view;
+package org.carder.view.moment;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -9,6 +10,9 @@ import androidx.annotation.NonNull;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+
+import org.carder.view.AutoGridView;
+import org.carder.view.R;
 
 import java.util.Collections;
 import java.util.List;
@@ -77,16 +81,48 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
         StringBuilder stringBuilder = new StringBuilder();
         for (String praise : praises) {
             stringBuilder.append(praise);
-            stringBuilder.append("、");
+            stringBuilder.append("，");
         }
         praiseTextView.setText(stringBuilder.substring(0, stringBuilder.length() - 1));
     }
 
-    private void setComment(GridLayout commentGridLayout, List<String> comments) {
+    private void setComment(GridLayout commentGridLayout, List<CommentProvider> comments) {
         if (comments == null || comments.isEmpty()) {
             commentGridLayout.setVisibility(View.GONE);
-            // return;
+            return;
         }
-        // TODO 设置评论互动
+        for (CommentProvider commentProvider : comments) {
+            switch (commentProvider.getType()) {
+                case DEF_COMMENT:
+                    setDefaultCommentView(commentGridLayout, commentProvider);
+                    break;
+                case REPLY_COMMENT:
+                    setReplyCommentView(commentGridLayout, commentProvider);
+                    break;
+            }
+        }
+    }
+
+    private void setDefaultCommentView(GridLayout rootView, CommentProvider commentProvider) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.moment_item_def_comment, rootView, false);
+        TextView userTextView = view.findViewById(R.id.tv_user);
+        userTextView.setText(commentProvider.getUsername());
+
+        TextView contentTextView = view.findViewById(R.id.tv_content);
+        contentTextView.setText(commentProvider.getContent());
+        rootView.addView(view);
+    }
+
+    private void setReplyCommentView(GridLayout rootView, CommentProvider commentProvider) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.moment_item_reply_comment, rootView, false);
+        TextView userTextView = view.findViewById(R.id.tv_user);
+        userTextView.setText(commentProvider.getUsername());
+
+        TextView replyTextView = view.findViewById(R.id.tv_reply);
+        replyTextView.setText(commentProvider.getReplyUsername());
+
+        TextView contentTextView = view.findViewById(R.id.tv_content);
+        contentTextView.setText(commentProvider.getContent());
+        rootView.addView(view);
     }
 }

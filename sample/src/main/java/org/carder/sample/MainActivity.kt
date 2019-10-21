@@ -3,7 +3,7 @@ package org.carder.sample
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
-import org.carder.view.MomentProvider
+import org.carder.view.moment.MomentProvider
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setMomentView() {
         val items = ArrayList<MomentProvider>()
+        items.add(MomentItem())
         items.add(MomentItem())
         mv.setData(items)
     }

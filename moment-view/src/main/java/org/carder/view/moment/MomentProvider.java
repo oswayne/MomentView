@@ -1,4 +1,4 @@
-package org.carder.view;
+package org.carder.view.moment;
 
 import android.widget.ImageView;
 
@@ -23,5 +23,5 @@ public interface MomentProvider {
 
     List<String> getPraises();
 
-    List<String> getComments();
+    List<CommentProvider> getComments();
 }

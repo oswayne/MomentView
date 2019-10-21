@@ -2,4 +2,6 @@
     <string name="app_name">moment-view</string>
     <string name="avatar">avatar</string>
     <string name="menu">menu</string>
+    <string name="colon">:</string>
+    <string name="reply">回复</string>
 </resources>

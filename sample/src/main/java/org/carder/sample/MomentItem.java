@@ -4,7 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
-import org.carder.view.MomentProvider;
+import org.carder.view.moment.CommentProvider;
+import org.carder.view.moment.MomentProvider;
 import org.carder.view.adapter.AutoGridAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MomentItem implements MomentProvider {
+
     @Override
     public void setAvatar(ImageView imageView) {
         imageView.setImageResource(R.mipmap.ic_launcher);
@@ -30,7 +32,14 @@ public class MomentItem implements MomentProvider {
         data.add(R.mipmap.ic_launcher);
         data.add(R.mipmap.ic_launcher);
         data.add(R.mipmap.ic_launcher);
+
         data.add(R.mipmap.ic_launcher);
+        data.add(R.mipmap.ic_launcher);
+        data.add(R.mipmap.ic_launcher);
+        data.add(R.mipmap.ic_launcher);
+
+        data.add(R.mipmap.ic_launcher);
+
         return new AutoGridAdapter<Integer>(data) {
             @NotNull
             @Override
@@ -51,13 +60,15 @@ public class MomentItem implements MomentProvider {
         data.add("小王");
         data.add("小张");
         data.add("小吴");
-        data.add("小井");
+        data.add("小姚");
         return data;
     }
 
     @Override
-    public List<String> getComments() {
-        return Collections.emptyList();
+    public List<CommentProvider> getComments() {
+        List<CommentProvider> comments = new ArrayList<>();
+        comments.add(new CommentItem());
+        return comments;
     }
 
     @Override
