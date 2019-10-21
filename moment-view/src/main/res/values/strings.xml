@@ -4,4 +4,7 @@
     <string name="menu">menu</string>
     <string name="colon">:</string>
     <string name="reply">回复</string>
+
+    <string name="comment">评论</string>
+    <string name="thumb_up">点赞</string>
 </resources>

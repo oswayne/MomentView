@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -24,11 +25,18 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, MomentProvider item) {
+    protected void convert(@NonNull BaseViewHolder helper, final MomentProvider item) {
         // Render Step1: User avatar, name or title, release time
         setDefaultInfo(helper, item);
         // Render Step2: Content ,Location, Type or description, Interaction data
         setOtherInfo(helper, item);
+
+        helper.getView(R.id.btn_operation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOperationMenu(v, item);
+            }
+        });
     }
 
     private void setDefaultInfo(BaseViewHolder helper, MomentProvider item) {
@@ -124,5 +132,11 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
         TextView contentTextView = view.findViewById(R.id.tv_content);
         contentTextView.setText(commentProvider.getContent());
         rootView.addView(view);
+    }
+
+    private void showOperationMenu(View anchor, MomentProvider item) {
+        PopupMenu popupMenu = new PopupMenu(mContext, anchor);
+        popupMenu.getMenuInflater().inflate(R.menu.memont_operation_menu, popupMenu.getMenu());
+        popupMenu.show();
     }
 }
