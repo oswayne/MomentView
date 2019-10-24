@@ -33,7 +33,6 @@ public final class MomentView extends ViewGroup {
         mMomentRecyclerView = new RecyclerView(getContext());
         mMomentRecyclerView.setLayoutParams(generateDefaultLayoutParams());
         mMomentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mMomentRecyclerView.setPadding(0, 0, 0, 12);
         mMomentRecyclerView.addItemDecoration(new DecorationLine());
         mMomentAdapter = new MomentViewAdapter();
         mMomentAdapter.bindToRecyclerView(mMomentRecyclerView);
@@ -42,5 +41,21 @@ public final class MomentView extends ViewGroup {
 
     public void setData(List<MomentProvider> data) {
         mMomentAdapter.setNewData(data);
+    }
+
+    public void setOnPraiseListener(OnPraiseListener onPraiseListener) {
+        mMomentAdapter.setOnPraiseListener(onPraiseListener);
+    }
+
+    public void setOnCommentListener(OnCommentListener onCommentListener) {
+        mMomentAdapter.setOnCommentListener(onCommentListener);
+    }
+
+    public interface OnPraiseListener {
+        void onPraise(MomentProvider item);
+    }
+
+    public interface OnCommentListener {
+        void onComment(MomentProvider item, String comment);
     }
 }

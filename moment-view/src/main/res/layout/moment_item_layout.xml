@@ -108,7 +108,7 @@
     <ImageButton
         android:id="@+id/btn_operation"
         android:layout_width="38dp"
-        android:layout_height="24dp"
+        android:layout_height="32dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:contentDescription="@string/menu"
