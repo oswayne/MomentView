@@ -1,19 +1,31 @@
-package org.carder.sample;
+package org.oswayne.sample;
 
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
-import org.carder.view.moment.CommentProvider;
-import org.carder.view.moment.MomentProvider;
-import org.carder.view.adapter.AutoGridAdapter;
+import org.carder.sample.R;
+import org.oswayne.view.adapter.AutoGridAdapter;
+import org.oswayne.view.moment.provider.CommentProvider;
+import org.oswayne.view.moment.provider.MomentProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MomentItem implements MomentProvider {
+
+    private List<String> praisesList = new ArrayList<>();
+    private List<CommentProvider> commentProviderList = new ArrayList<>();
+
+    public MomentItem() {
+        praisesList.add("小王");
+        praisesList.add("小张");
+        praisesList.add("小吴");
+        praisesList.add("小姚");
+
+        commentProviderList.add(new CommentItem());
+    }
 
     @Override
     public void setAvatar(ImageView imageView) {
@@ -26,7 +38,7 @@ public class MomentItem implements MomentProvider {
     }
 
     @Override
-    public AutoGridAdapter getMediaViewAdapter() {
+    public AutoGridAdapter<?> getMediaViewAdapter() {
         List<Integer> data = new ArrayList<>();
         data.add(R.mipmap.ic_launcher);
         data.add(R.mipmap.ic_launcher);
@@ -56,19 +68,12 @@ public class MomentItem implements MomentProvider {
 
     @Override
     public List<String> getPraises() {
-        ArrayList<String> data = new ArrayList<>();
-        data.add("小王");
-        data.add("小张");
-        data.add("小吴");
-        data.add("小姚");
-        return data;
+        return praisesList;
     }
 
     @Override
     public List<CommentProvider> getComments() {
-        List<CommentProvider> comments = new ArrayList<>();
-        comments.add(new CommentItem());
-        return comments;
+        return commentProviderList;
     }
 
     @Override

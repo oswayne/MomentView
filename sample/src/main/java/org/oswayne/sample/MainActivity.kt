@@ -1,10 +1,10 @@
-package org.carder.sample
+package org.oswayne.sample
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
-import org.carder.view.moment.MomentProvider
-import org.carder.view.moment.MomentView
+import org.carder.sample.R
+import org.oswayne.view.moment.provider.MomentProvider
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,11 +19,11 @@ class MainActivity : AppCompatActivity() {
         items.add(MomentItem())
         items.add(MomentItem())
         mv.setData(items)
-        mv.setOnCommentListener { item, comment ->
-            println(comment)
+        mv.setOnCommentListener { position, item, comment ->
+            mv.addCommentData(position, CommentItem())
         }
-        mv.setOnPraiseListener { item ->
-            println("点赞")
+        mv.setOnPraiseListener { position, item ->
+            mv.addPraiseData(position, "大猪蹄子")
         }
     }
 }

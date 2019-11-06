@@ -1,6 +1,6 @@
-package org.carder.sample;
+package org.oswayne.sample;
 
-import org.carder.view.moment.CommentProvider;
+import org.oswayne.view.moment.provider.CommentProvider;
 
 public class CommentItem implements CommentProvider {
     @Override

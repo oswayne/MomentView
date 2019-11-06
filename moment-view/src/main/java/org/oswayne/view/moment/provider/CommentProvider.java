@@ -1,4 +1,4 @@
-package org.carder.view.moment;
+package org.oswayne.view.moment.provider;
 
 public interface CommentProvider {
     String getId();

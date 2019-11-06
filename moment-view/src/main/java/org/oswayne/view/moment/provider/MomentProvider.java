@@ -1,8 +1,8 @@
-package org.carder.view.moment;
+package org.oswayne.view.moment.provider;
 
 import android.widget.ImageView;
 
-import org.carder.view.adapter.AutoGridAdapter;
+import org.oswayne.view.adapter.AutoGridAdapter;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface MomentProvider {
 
     String getTitle();
 
-    AutoGridAdapter getMediaViewAdapter();
+    AutoGridAdapter<?> getMediaViewAdapter();
 
     String getLocate();
 

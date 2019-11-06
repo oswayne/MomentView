@@ -1,4 +1,4 @@
-package org.carder.view.moment;
+package org.oswayne.view.moment;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,9 +26,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 
-import org.carder.view.AutoGridView;
+import org.oswayne.view.AutoGridView;
 import org.carder.view.R;
+import org.oswayne.view.moment.provider.CommentProvider;
+import org.oswayne.view.moment.provider.MomentProvider;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,7 +45,7 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
     }
 
     @Override
-    protected void convert(@NonNull BaseViewHolder helper, final MomentProvider item) {
+    protected void convert(@NonNull final BaseViewHolder helper, final MomentProvider item) {
         // Render Step1: User avatar, name or title, release time
         setDefaultInfo(helper, item);
         // Render Step2: Content ,Location, Type or description, Interaction data
@@ -52,7 +54,7 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
         helper.getView(R.id.btn_operation).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showOperationMenu(v, item);
+                showOperationMenu(v, helper.getAdapterPosition(), item);
             }
         });
     }
@@ -129,6 +131,7 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
             commentGridLayout.setVisibility(View.GONE);
             return;
         }
+        commentGridLayout.removeAllViews();
         for (CommentProvider commentProvider : comments) {
             switch (commentProvider.getType()) {
                 case DEF_COMMENT:
@@ -141,6 +144,9 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
         }
     }
 
+    /**
+     * 设置默认评论信息
+     */
     private void setDefaultCommentView(GridLayout rootView, CommentProvider commentProvider) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.moment_item_def_comment, rootView, false);
         TextView userTextView = view.findViewById(R.id.tv_user);
@@ -151,6 +157,9 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
         rootView.addView(view);
     }
 
+    /**
+     * 设置回复评论信息
+     */
     private void setReplyCommentView(GridLayout rootView, CommentProvider commentProvider) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.moment_item_reply_comment, rootView, false);
         TextView userTextView = view.findViewById(R.id.tv_user);
@@ -167,29 +176,59 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
     /**
      * 显示操作菜单
      */
-    private void showOperationMenu(View anchor, MomentProvider item) {
+    private void showOperationMenu(View anchor, int position, MomentProvider item) {
         PopupMenu popupMenu = new PopupMenu(mContext, anchor);
         popupMenu.getMenuInflater().inflate(R.menu.memont_operation_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener(mContext, getRecyclerView(), mOnPraiseListener, mOnCommentListener, item));
+        popupMenu.setOnMenuItemClickListener(new OnMenuItemClickListener(mContext, getRecyclerView(), mOnPraiseListener, mOnCommentListener, position, item));
         popupMenu.show();
     }
 
-    void setOnPraiseListener(MomentView.OnPraiseListener mOnPraiseListener) {
-        this.mOnPraiseListener = mOnPraiseListener;
+    /**
+     * 设置点赞监听器
+     *
+     * @param onPraiseListener {@link MomentView.OnPraiseListener} 监听器
+     */
+    void setOnPraiseListener(MomentView.OnPraiseListener onPraiseListener) {
+        this.mOnPraiseListener = onPraiseListener;
     }
 
-    void setOnCommentListener(MomentView.OnCommentListener mOnCommentListener) {
-        this.mOnCommentListener = mOnCommentListener;
+    /**
+     * 设置评论监听器
+     *
+     * @param onCommentListener {@link MomentView.OnCommentListener} 监听器
+     */
+    void setOnCommentListener(MomentView.OnCommentListener onCommentListener) {
+        this.mOnCommentListener = onCommentListener;
+    }
+
+    void addPraiseData(int index, String praise) {
+        getData().get(index).getPraises().add(praise);
+        notifyItemChanged(index);
+    }
+
+    void addPraiseData(int index, Collection<String> praise) {
+        getData().get(index).getPraises().addAll(praise);
+        notifyItemChanged(index);
+    }
+
+    void addCommentData(int index, CommentProvider commentProvider) {
+        getData().get(index).getComments().add(commentProvider);
+        notifyItemChanged(index);
+    }
+
+    void addCommentData(int index, Collection<CommentProvider> commentProviders) {
+        getData().get(index).getComments().addAll(commentProviders);
+        notifyItemChanged(index);
     }
 
     /**
      * 评论互动菜单点击监听
      */
-    private static class OnMenuItemClickListener
-            implements PopupMenu.OnMenuItemClickListener, TextView.OnEditorActionListener, View.OnClickListener, PopupWindow.OnDismissListener {
+    private static class OnMenuItemClickListener implements PopupMenu.OnMenuItemClickListener, TextView.OnEditorActionListener, View.OnClickListener, PopupWindow.OnDismissListener {
 
         private MomentView.OnPraiseListener mOnPraiseListener;
         private MomentView.OnCommentListener mOnCommentListener;
+        private int curPosition;
         private MomentProvider mMomentProvider;
 
         private Context mContext;
@@ -199,17 +238,19 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
 
         /**
          * 这段代码可能看起来像个傻逼，但是请诸位先听我解释：
-         * 想要在弹出 PopupMenu 的同时一起弹出软键盘是不可行的，软键盘必须延迟 150 ms 以上弹出，
-         * 延迟时间可能与性能有关，暂未做更多的测试，在 MI 4 LTE 机型上测得 150 ms 可以正常弹出。
+         * 想要在弹出 PopupMenu 的同时一起弹出软键盘是不可行的，软键盘必须延迟 150 ms 以上等待 PopupMenu 渲染完成后弹出，
+         * 渲染时间与性能有关，所以请尽可能的多测试低端机型后得出一个合适的时间，
+         * 目前暂未做更多的测试，仅在 MI 4 LTE(非 MIUI) 机型上测得 150 ms 可以正常弹出。
          */
         private Handler mShowSoftKeyboardHandler;
         private InputMethodManager mInputMethodManager;
 
-        OnMenuItemClickListener(Context context, RecyclerView recyclerView, MomentView.OnPraiseListener onPraiseListener, MomentView.OnCommentListener onCommentListener, MomentProvider momentProvider) {
+        OnMenuItemClickListener(Context context, RecyclerView recyclerView, MomentView.OnPraiseListener onPraiseListener, MomentView.OnCommentListener onCommentListener, int position, MomentProvider momentProvider) {
             this.mContext = context;
             this.mRecyclerView = recyclerView;
             this.mOnPraiseListener = onPraiseListener;
             this.mOnCommentListener = onCommentListener;
+            this.curPosition = position;
             this.mMomentProvider = momentProvider;
             this.mShowSoftKeyboardHandler = new Handler();
         }
@@ -218,7 +259,7 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
         public boolean onMenuItemClick(MenuItem menuItem) {
             if (menuItem.getItemId() == R.id.action_menu_thumb_up) {
                 if (mOnPraiseListener != null) {
-                    mOnPraiseListener.onPraise(mMomentProvider);
+                    mOnPraiseListener.onPraise(curPosition, mMomentProvider);
                     return true;
                 }
             } else if (menuItem.getItemId() == R.id.action_menu_comment) {
@@ -269,7 +310,7 @@ class MomentViewAdapter extends BaseQuickAdapter<MomentProvider, BaseViewHolder>
         }
 
         private void onCommentSend() {
-            mOnCommentListener.onComment(mMomentProvider, mCommentEditText.getText().toString());
+            mOnCommentListener.onComment(curPosition, mMomentProvider, mCommentEditText.getText().toString());
             mCommentInputWindow.dismiss();
         }
 

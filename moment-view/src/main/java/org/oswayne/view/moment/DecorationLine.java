@@ -1,4 +1,4 @@
-package org.carder.view.moment;
+package org.oswayne.view.moment;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

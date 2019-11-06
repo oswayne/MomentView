@@ -1,4 +1,4 @@
-package org.carder.view.moment;
+package org.oswayne.view.moment;
 
 public enum CommentModeEnum {
     DEF_COMMENT_MODE("默认无互动模式", 0),
